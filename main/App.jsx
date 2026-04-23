@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-const INFLUENCERS = [
-  // PRIMARY (Class 1-5)
+// Fallback static data shown while API loads or if API fails
+const STATIC_INFLUENCERS = [
   { id: 1, name: "Sunita Sharma", handle: "@sunitateacheskids", platform: "Instagram", followers: "48K", engagementRate: "6.2%", niche: "Early Learning", subjects: ["Math", "English"], segment: "Class 1–5", email: "sunita.sharma.edu@gmail.com", profileLink: "https://instagram.com/sunitateacheskids", contentThemes: "Fun worksheets, phonics games, number rhymes", tone: "Warm, playful, nurturing", recentContent: "30-day alphabet challenge for kids", location: "Jaipur", brandFit: "High" },
   { id: 2, name: "Rahul Verma", handle: "@rahulprimarymath", platform: "YouTube", followers: "72K", engagementRate: "5.8%", niche: "Primary Math", subjects: ["Math"], segment: "Class 1–5", email: "rahul.vermayt@gmail.com", profileLink: "https://youtube.com/@rahulprimarymath", contentThemes: "Tables, shapes, counting stories", tone: "Energetic, relatable", recentContent: "Multiplication tables through songs", location: "Lucknow", brandFit: "High" },
   { id: 3, name: "Priya Nair", handle: "@priyalearnswithlove", platform: "Instagram", followers: "31K", engagementRate: "7.4%", niche: "Holistic Primary Education", subjects: ["EVS", "English", "Math"], segment: "Class 1–5", email: "priya.nair.edu@gmail.com", profileLink: "https://instagram.com/priyalearnswithlove", contentThemes: "Activity-based learning, sensory play, story reading", tone: "Gentle, emotional, parent-friendly", recentContent: "Story-based EVS series for Grade 2", location: "Kochi", brandFit: "High" },
@@ -12,8 +12,6 @@ const INFLUENCERS = [
   { id: 8, name: "Vikram Singh", handle: "@vikramcountsmath", platform: "YouTube", followers: "38K", engagementRate: "7.2%", niche: "Abacus & Mental Math", subjects: ["Math"], segment: "Class 1–5", email: "vikram.singh.abacus@gmail.com", profileLink: "https://youtube.com/@vikramcountsmath", contentThemes: "Abacus tutorials, mental math tricks, speed math", tone: "Competitive, achievement-oriented", recentContent: "3-digit addition under 10 seconds", location: "Ahmedabad", brandFit: "Very High" },
   { id: 9, name: "Fatima Sheikh", handle: "@fatimateachesuae", platform: "Instagram", followers: "26K", engagementRate: "8.8%", niche: "Bilingual Learning", subjects: ["Urdu", "Math"], segment: "Class 1–5", email: "fatima.sheikh.edu@gmail.com", profileLink: "https://instagram.com/fatimateachesuae", contentThemes: "Urdu rhymes, bilingual worksheets", tone: "Warm, community-driven", recentContent: "Urdu alphabet coloring book series", location: "Mumbai", brandFit: "Medium" },
   { id: 10, name: "Suresh Nambiar", handle: "@sureshkidsmath", platform: "YouTube", followers: "44K", engagementRate: "6.3%", niche: "Vedic Math for Kids", subjects: ["Math"], segment: "Class 1–5", email: "suresh.nambiar.vedic@gmail.com", profileLink: "https://youtube.com/@sureshkidsmath", contentThemes: "Vedic math tricks, fast calculation, number patterns", tone: "Traditional yet modern", recentContent: "Multiply any number by 11 instantly", location: "Trivandrum", brandFit: "Very High" },
-
-  // MIDDLE (Class 6–8)
   { id: 11, name: "Anjali Dubey", handle: "@anjalidubeyteaches", platform: "YouTube", followers: "89K", engagementRate: "5.1%", niche: "NCERT Science", subjects: ["Science"], segment: "Class 6–8", email: "anjali.dubey.ncert@gmail.com", profileLink: "https://youtube.com/@anjalidubeyteaches", contentThemes: "Chapter-wise NCERT, diagrams, short notes", tone: "Academic, structured", recentContent: "Light & shadows - Class 6 full chapter", location: "Delhi", brandFit: "High" },
   { id: 12, name: "Rohan Gupta", handle: "@rohanmathmagic", platform: "YouTube", followers: "95K", engagementRate: "4.9%", niche: "Math Olympiad Prep", subjects: ["Math"], segment: "Class 6–8", email: "rohan.gupta.math@gmail.com", profileLink: "https://youtube.com/@rohanmathmagic", contentThemes: "Olympiad problems, trick questions, mental math", tone: "Competitive, challenging", recentContent: "IMO Class 7 prep - geometry set", location: "Chandigarh", brandFit: "Very High" },
   { id: 13, name: "Shreya Joshi", handle: "@shreyaenglishhub", platform: "Instagram", followers: "67K", engagementRate: "5.7%", niche: "English Grammar & Lit", subjects: ["English"], segment: "Class 6–8", email: "shreya.joshi.eng@gmail.com", profileLink: "https://instagram.com/shreyaenglishhub", contentThemes: "Essay writing, comprehension, vocabulary building", tone: "Polished, aspirational", recentContent: "How to write a perfect paragraph in 5 steps", location: "Nagpur", brandFit: "Medium" },
@@ -29,8 +27,6 @@ const INFLUENCERS = [
   { id: 23, name: "Priyanka Iyer", handle: "@priyankasocialstudies", platform: "Instagram", followers: "44K", engagementRate: "6.4%", niche: "History & Civics", subjects: ["Social Science"], segment: "Class 6–8", email: "priyanka.iyer.hist@gmail.com", profileLink: "https://instagram.com/priyankasocialstudies", contentThemes: "Mughal empire, Indian constitution, timeline infographics", tone: "Storytelling, visual", recentContent: "Mughal emperors in order - memory trick", location: "Coimbatore", brandFit: "Medium" },
   { id: 24, name: "Nitin Bhatt", handle: "@nitinmathchampion", platform: "YouTube", followers: "66K", engagementRate: "5.7%", niche: "Math Competitions", subjects: ["Math"], segment: "Class 6–8", email: "nitin.bhatt.mathcomp@gmail.com", profileLink: "https://youtube.com/@nitinmathchampion", contentThemes: "Speed math, competition prep, past olympiad papers", tone: "Competitive, motivational", recentContent: "Solving SOF IMO 2024 paper live", location: "Ahmedabad", brandFit: "Very High" },
   { id: 25, name: "Aarti Mishra", handle: "@aartilearningcorner", platform: "Instagram", followers: "34K", engagementRate: "7.6%", niche: "Holistic Middle School", subjects: ["Math", "Science", "English"], segment: "Class 6–8", email: "aarti.mishra.learn@gmail.com", profileLink: "https://instagram.com/aartilearningcorner", contentThemes: "Study tips, time tables, motivation for students", tone: "Big-sister vibe, motivational", recentContent: "How I scored 95% in Class 8 exams", location: "Bhopal", brandFit: "High" },
-
-  // UPPER (Class 9–10)
   { id: 26, name: "Arjun Kapoor", handle: "@arjunphysicsclass10", platform: "YouTube", followers: "97K", engagementRate: "4.7%", niche: "Physics Class 9-10", subjects: ["Physics"], segment: "Class 9–10", email: "arjun.kapoor.phy10@gmail.com", profileLink: "https://youtube.com/@arjunphysicsclass10", contentThemes: "CBSE physics, numericals, board prep", tone: "Serious, board-exam focused", recentContent: "Electricity chapter full revision Class 10", location: "Delhi", brandFit: "High" },
   { id: 27, name: "Simran Kaur", handle: "@simranchembio", platform: "YouTube", followers: "88K", engagementRate: "4.9%", niche: "Chemistry & Biology", subjects: ["Chemistry", "Biology"], segment: "Class 9–10", email: "simran.kaur.chem@gmail.com", profileLink: "https://youtube.com/@simranchembio", contentThemes: "Carbon compounds, life processes, exam shortcuts", tone: "Concise, formula-focused", recentContent: "Full chapter: Life Processes Class 10", location: "Amritsar", brandFit: "High" },
   { id: 28, name: "Gaurav Sinha", handle: "@gauravsciencehub", platform: "YouTube", followers: "76K", engagementRate: "5.1%", niche: "Science (All Streams)", subjects: ["Physics", "Chemistry", "Biology"], segment: "Class 9–10", email: "gaurav.sinha.sciencehub@gmail.com", profileLink: "https://youtube.com/@gauravsciencehub", contentThemes: "NCERT science, past papers, one-shots", tone: "High-energy, exam warrior", recentContent: "30-minute Class 10 science full revision", location: "Patna", brandFit: "High" },
@@ -46,8 +42,6 @@ const INFLUENCERS = [
   { id: 38, name: "Sanjay Yadav", handle: "@sanjaygkcompetition", platform: "YouTube", followers: "77K", engagementRate: "5.1%", niche: "GK & Current Affairs", subjects: ["GK"], segment: "Class 9–10", email: "sanjay.yadav.gkcomp@gmail.com", profileLink: "https://youtube.com/@sanjaygkcompetition", contentThemes: "Monthly current affairs, quiz competitions, GK for Olympiads", tone: "Quiz-master, rapid-fire", recentContent: "Top 100 GK questions for 2025 Olympiads", location: "Jaipur", brandFit: "Very High" },
   { id: 39, name: "Preeti Nath", handle: "@preetienglishliterature", platform: "YouTube", followers: "52K", engagementRate: "5.8%", niche: "English Literature", subjects: ["English"], segment: "Class 9–10", email: "preeti.nath.lit@gmail.com", profileLink: "https://youtube.com/@preetienglishliterature", contentThemes: "Poem analysis, prose summaries, character studies", tone: "Literary, deep-dive", recentContent: "The Road Not Taken - full analysis", location: "Kolkata", brandFit: "Medium" },
   { id: 40, name: "Mohan Lal", handle: "@mohanmathchampion10", platform: "YouTube", followers: "93K", engagementRate: "4.7%", niche: "Olympiad Math Class 9-10", subjects: ["Math"], segment: "Class 9–10", email: "mohan.lal.mathchamp@gmail.com", profileLink: "https://youtube.com/@mohanmathchampion10", contentThemes: "Olympiad shortcuts, IIT-JEE foundation, proof-based problems", tone: "Elite, competitive", recentContent: "RMO 2024 problem walkthroughs", location: "Delhi", brandFit: "Very High" },
-
-  // MIXED / MULTI-GRADE
   { id: 41, name: "Lakshmi Devi", handle: "@lakshmieducationindia", platform: "YouTube", followers: "68K", engagementRate: "5.5%", niche: "Multi-grade Education", subjects: ["All Subjects"], segment: "Class 1–10", email: "lakshmi.devi.edu@gmail.com", profileLink: "https://youtube.com/@lakshmieducationindia", contentThemes: "NCERT full solutions, parent tips, school readiness", tone: "Authoritative yet accessible", recentContent: "How to prepare for first Olympiad - parent guide", location: "Chennai", brandFit: "Very High" },
   { id: 42, name: "Rohit Thakur", handle: "@rohitcompetitiveclass", platform: "YouTube", followers: "86K", engagementRate: "5.0%", niche: "Competitive Exam Prep", subjects: ["Math", "Science", "GK"], segment: "Class 5–10", email: "rohit.thakur.comp@gmail.com", profileLink: "https://youtube.com/@rohitcompetitiveclass", contentThemes: "NTSE, SOF Olympiad, NSO, IMO prep content", tone: "Ambitious, no-nonsense", recentContent: "NTSE Stage 1 Math shortcuts", location: "Delhi", brandFit: "Very High" },
   { id: 43, name: "Ananya Singh", handle: "@ananyakidslearn", platform: "Instagram", followers: "37K", engagementRate: "7.3%", niche: "Parent + Child Learning", subjects: ["All Subjects"], segment: "Class 1–5", email: "ananya.singh.pkids@gmail.com", profileLink: "https://instagram.com/ananyakidslearn", contentThemes: "At-home learning activities, flashcards, parent involvement", tone: "Parenting + education hybrid", recentContent: "10 activities to boost your child's math brain", location: "Mumbai", brandFit: "High" },
@@ -64,14 +58,12 @@ const SEGMENTS = ["All", "Class 1–5", "Class 6–8", "Class 9–10", "Class 1�
 const SUBJECTS = ["All", "Math", "Science", "English", "GK", "Social Science", "Hindi", "Physics", "Chemistry", "Biology", "All Subjects"];
 const PLATFORMS = ["All", "YouTube", "Instagram"];
 const BRAND_FITS = ["All", "Very High", "High", "Medium"];
-
 const COMPANY = "K12 Olympiad";
 
 function generateEmail(inf) {
   const subjectLine = `Partnership Opportunity: ${COMPANY} × ${inf.name.split(" ")[0]}`;
   const segmentLabel = inf.segment;
   const subjectStr = inf.subjects.join(" & ");
-
   const hooks = {
     "Class 1–5": `Your engaging ${subjectStr} content for young learners caught our attention`,
     "Class 6–8": `Your ${subjectStr} content for middle schoolers stands out for its clarity and depth`,
@@ -82,9 +74,7 @@ function generateEmail(inf) {
     "Class 4–8": `Your STEM-focused content for Class 4–8 is building tomorrow's innovators`,
     "Class 4–9": `Your science experiment content makes learning hands-on and memorable`,
   };
-
   const hook = hooks[inf.segment] || `Your ${subjectStr} content for Indian students is truly outstanding`;
-
   const body = `Subject: ${subjectLine}
 
 Hi ${inf.name.split(" ")[0]},
@@ -102,7 +92,6 @@ Would love to connect over a quick call this week!
 Warm regards,
 Partnership Team
 ${COMPANY}`;
-
   return { subject: subjectLine, body };
 }
 
@@ -120,18 +109,44 @@ const segmentColor = {
 };
 
 export default function App() {
+  // ─── State ───────────────────────────────────────────────
+  const [influencers, setInfluencers] = useState(STATIC_INFLUENCERS);
+  const [dataSource, setDataSource] = useState("static"); // "static" | "live"
+  const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({ segment: "All", subject: "All", platform: "All", brandFit: "All", search: "" });
   const [selected, setSelected] = useState(null);
   const [activeTab, setActiveTab] = useState("email");
   const [generating, setGenerating] = useState(false);
   const [aiMessage, setAiMessage] = useState(null);
-  const [view, setView] = useState("grid"); // grid | table | workflow
-  const [tone, setTone] = useState("formal"); // formal | casual
-  const [copied, setCopied] = useState(null); // tracks what was copied
+  const [view, setView] = useState("grid");
+  const [tone, setTone] = useState("formal");
+  const [copied, setCopied] = useState(null);
   const [sending, setSending] = useState(false);
-  const [sendStatus, setSendStatus] = useState(null); // 'success' | 'error' | null
+  const [sendStatus, setSendStatus] = useState(null);
 
-  const filtered = INFLUENCERS.filter(inf => {
+  // ─── Fetch live YouTube data ──────────────────────────────
+  async function fetchLiveData() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/fetch_influencers");
+      const data = await res.json();
+      if (data.influencers && data.influencers.length > 0) {
+        setInfluencers(data.influencers);
+        setDataSource("live");
+      } else {
+        setInfluencers(STATIC_INFLUENCERS);
+        setDataSource("static");
+      }
+    } catch (e) {
+      console.error("Failed to fetch live data:", e);
+      setInfluencers(STATIC_INFLUENCERS);
+      setDataSource("static");
+    }
+    setLoading(false);
+  }
+
+  // ─── Filtering ────────────────────────────────────────────
+  const filtered = influencers.filter(inf => {
     if (filters.segment !== "All" && inf.segment !== filters.segment) return false;
     if (filters.subject !== "All" && !inf.subjects.includes(filters.subject)) return false;
     if (filters.platform !== "All" && inf.platform !== filters.platform) return false;
@@ -143,66 +158,61 @@ export default function App() {
   });
 
   const segmentCounts = {};
-  INFLUENCERS.forEach(i => { segmentCounts[i.segment] = (segmentCounts[i.segment] || 0) + 1; });
+  influencers.forEach(i => { segmentCounts[i.segment] = (segmentCounts[i.segment] || 0) + 1; });
 
-async function generateAIMessage(inf, type) {
-  setGenerating(true);
-  setAiMessage(null);
-
-  try {
-    const toneInstruction = tone === "formal"
-  ? "Use a professional, formal tone suitable for a business partnership email."
-  : "Use a friendly, casual and conversational tone like you're reaching out to a fellow creator.";
-
-const prompt =
-  type === "email"
-    ? `Write a personalized outreach email to ${inf.name} for K12 Olympiad collaboration. Mention their content "${inf.recentContent}" and offer 20% commission. Keep it under 90 words. ${toneInstruction}`
-    : `Write a short Instagram DM to ${inf.name} mentioning their content "${inf.recentContent}" and offering 20% commission from K12 Olympiad. Keep it under 30 words. ${toneInstruction}`;
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ prompt })
-    });
-
-    const data = await response.json();
-    setAiMessage(data.text || "Failed to generate message.");
-
-  } catch (e) {
-    setAiMessage("Error generating message. Please try again.");
+  // ─── AI Message Generation ────────────────────────────────
+  async function generateAIMessage(inf, type) {
+    setGenerating(true);
+    setAiMessage(null);
+    try {
+      const toneInstruction = tone === "formal"
+        ? "Use a professional, formal tone suitable for a business partnership email."
+        : "Use a friendly, casual and conversational tone like you're reaching out to a fellow creator.";
+      const prompt = type === "email"
+        ? `Write a personalized outreach email to ${inf.name} for K12 Olympiad collaboration. Mention their content "${inf.recentContent}" and offer 20% commission. Keep it under 90 words. ${toneInstruction}`
+        : `Write a short Instagram DM to ${inf.name} mentioning their content "${inf.recentContent}" and offering 20% commission from K12 Olympiad. Keep it under 30 words. ${toneInstruction}`;
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+      const data = await response.json();
+      setAiMessage(data.text || "Failed to generate message.");
+    } catch (e) {
+      setAiMessage("Error generating message. Please try again.");
+    }
+    setGenerating(false);
   }
 
-  setGenerating(false);
-}
-
-async function send_email(inf) {
-  setSending(true);
-  setSendStatus(null);
-  const email = generateEmail(inf);
-  try {
-    const res = await fetch("/api/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: inf.email,
-        subject: email.subject,
-        message: email.body.split("\n").slice(2).join("\n"),
-        name: inf.name,
-      }),
-    });
-    const data = await res.json();
-    setSendStatus(data.success ? "success" : "error");
-  } catch (e) {
-    setSendStatus("error");
+  // ─── Send Email ───────────────────────────────────────────
+  async function send_email(inf) {
+    setSending(true);
+    setSendStatus(null);
+    const email = generateEmail(inf);
+    try {
+      const res = await fetch("/api/send_email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: inf.email,
+          subject: email.subject,
+          message: email.body.split("\n").slice(2).join("\n"),
+          name: inf.name,
+        }),
+      });
+      const data = await res.json();
+      setSendStatus(data.success ? "success" : "error");
+    } catch (e) {
+      setSendStatus("error");
+    }
+    setSending(false);
+    setTimeout(() => setSendStatus(null), 4000);
   }
-  setSending(false);
-  setTimeout(() => setSendStatus(null), 4000);
-}
 
   const staticEmail = selected ? generateEmail(selected) : null;
   const staticDM = selected ? generateDM(selected) : null;
 
+  // ─── Render ───────────────────────────────────────────────
   return (
     <div style={{ fontFamily: "'Outfit', sans-serif", background: "#0A0E1A", minHeight: "100vh", color: "#E8EAF0" }}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -210,16 +220,28 @@ async function send_email(inf) {
       {/* Header */}
       <div style={{ background: "linear-gradient(135deg, #0F1629 0%, #1A1040 50%, #0F1629 100%)", borderBottom: "1px solid #1E2540", padding: "20px 32px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: "linear-gradient(135deg, #4A9EFF, #A855F7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🏆</div>
-              <div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: "#fff", letterSpacing: "-0.5px" }}>{COMPANY}</div>
-                <div style={{ fontSize: 12, color: "#6B7A99", fontFamily: "'Space Mono', monospace" }}>Micro-Influencer Outreach System</div>
-              </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: "linear-gradient(135deg, #4A9EFF, #A855F7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🏆</div>
+            <div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: "#fff", letterSpacing: "-0.5px" }}>{COMPANY}</div>
+              <div style={{ fontSize: 12, color: "#6B7A99", fontFamily: "'Space Mono', monospace" }}>Micro-Influencer Outreach System</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+            {/* Live Data Toggle Button */}
+            <button
+              onClick={fetchLiveData}
+              disabled={loading}
+              style={{
+                padding: "8px 16px", borderRadius: 8,
+                border: `1px solid ${dataSource === "live" ? "#00C98D" : "#F5A623"}`,
+                background: dataSource === "live" ? "rgba(0,201,141,0.15)" : "rgba(245,166,35,0.1)",
+                color: dataSource === "live" ? "#00C98D" : "#F5A623",
+                cursor: loading ? "not-allowed" : "pointer",
+                fontSize: 12, fontWeight: 700, fontFamily: "'Outfit', sans-serif",
+              }}>
+              {loading ? "⏳ Fetching..." : dataSource === "live" ? "✓ Live Data" : "🔄 Load Live Data"}
+            </button>
             {["grid", "table", "workflow"].map(v => (
               <button key={v} onClick={() => setView(v)} style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid", borderColor: view === v ? "#4A9EFF" : "#1E2540", background: view === v ? "rgba(74,158,255,0.15)" : "transparent", color: view === v ? "#4A9EFF" : "#6B7A99", cursor: "pointer", fontSize: 13, fontWeight: 600, textTransform: "capitalize", fontFamily: "'Outfit', sans-serif" }}>
                 {v === "grid" ? "🃏 Cards" : v === "table" ? "📋 Table" : "⚙️ Workflow"}
@@ -231,11 +253,12 @@ async function send_email(inf) {
         {/* Stats Row */}
         <div style={{ display: "flex", gap: 16, marginTop: 20, flexWrap: "wrap" }}>
           {[
-            { label: "Total Influencers", value: "50", icon: "👥" },
+            { label: "Total Influencers", value: influencers.length, icon: "👥" },
             { label: "Filtered", value: filtered.length, icon: "🔍" },
             { label: "Platforms", value: "2", icon: "📱" },
             { label: "Class Segments", value: "8", icon: "📚" },
             { label: "Commission", value: "20%", icon: "💰" },
+            { label: "Data Source", value: dataSource === "live" ? "YouTube API" : "Curated", icon: dataSource === "live" ? "🟢" : "📁" },
           ].map(s => (
             <div key={s.label} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid #1E2540", borderRadius: 10, padding: "10px 16px", minWidth: 110 }}>
               <div style={{ fontSize: 11, color: "#6B7A99", marginBottom: 2 }}>{s.icon} {s.label}</div>
@@ -245,16 +268,25 @@ async function send_email(inf) {
         </div>
       </div>
 
+      {/* Loading overlay */}
+      {loading && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(10,14,26,0.9)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", zIndex: 200 }}>
+          <div style={{ fontSize: 40, marginBottom: 16 }}>🔍</div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: "#4A9EFF", marginBottom: 8 }}>Fetching Live YouTube Data...</div>
+          <div style={{ fontSize: 13, color: "#6B7A99" }}>Searching Indian education channels • Filtering micro-influencers • Extracting emails</div>
+        </div>
+      )}
+
       {/* Workflow View */}
       {view === "workflow" && (
         <div style={{ padding: "32px", maxWidth: 900, margin: "0 auto" }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 24 }}>⚙️ Outreach Execution Workflow</h2>
           {[
-            { step: "01", title: "Influencer Discovery & Enrichment", color: "#4A9EFF", desc: "Influencers scraped via Qoruz/Winkl APIs or hashtag search (#olympiadmath, #cbsescience). Each profile enriched with follower count, engagement rate, niche, email, and subject segment.", api: "Qoruz API / Winkl API / Instagram Graph API" },
-            { step: "02", title: "Segmentation & Filtering", color: "#A855F7", desc: "Influencers auto-classified by class segment (1–5, 6–8, 9–10) using NLP subject-tag matching. Further filtered by brand-fit score, engagement rate (>4.5%), and platform.", api: "Custom classification logic + Pandas/Numpy" },
-            { step: "03", title: "AI Message Generation", color: "#00C98D", desc: "For each influencer, Claude API generates personalized email (60–90 words) and Instagram DM (15–30 words) referencing their niche, recent content, tone, and student audience. 20% affiliate offer is always included.", api: "Anthropic Claude API (claude-sonnet-4)" },
-            { step: "04", title: "Email Sending Layer", color: "#F5A623", desc: "Personalized emails sent via SendGrid/Mailgun API. Each email includes a unique UTM-tagged Olympiad registration link for tracking. Sending rate: max 50/day to avoid spam flags.", api: "SendGrid API / Mailgun API" },
-            { step: "05", title: "Instagram DM Layer", color: "#FF6B6B", desc: "DMs sent via Instagram Graph API (requires Business/Creator account access). For accounts without API access, Phantombuster or Make.com automation handles DM queuing. One DM per account per 24 hours.", api: "Instagram Graph API / Phantombuster" },
+            { step: "01", title: "Influencer Discovery & Enrichment", color: "#4A9EFF", desc: "Influencers fetched via YouTube Data API v3 — searches Indian education channels, filters 5K–100K subscribers, extracts emails from channel descriptions via regex. Fallback to curated dataset if API unavailable.", api: "YouTube Data API v3 / Qoruz API / Winkl API" },
+            { step: "02", title: "Segmentation & Filtering", color: "#A855F7", desc: "Influencers auto-classified by class segment (1–5, 6–8, 9–10) using keyword matching on channel title and description. Further filtered by brand-fit score, engagement rate (>4.5%), and platform.", api: "Custom classification logic" },
+            { step: "03", title: "AI Message Generation", color: "#00C98D", desc: "For each influencer, Claude API generates personalized email (60–90 words) and Instagram DM (15–30 words) referencing their niche, recent content, tone, and student audience. 20% affiliate offer always included.", api: "Anthropic Claude API (claude-sonnet-4)" },
+            { step: "04", title: "Email Sending Layer", color: "#F5A623", desc: "Personalized emails sent via Resend API. Each email includes a unique UTM-tagged Olympiad registration link. Button shows real-time status — Sending → Sent / Failed.", api: "Resend API" },
+            { step: "05", title: "Instagram DM Layer", color: "#FF6B6B", desc: "DMs sent via Instagram Graph API (requires Business/Creator account access). For accounts without API access, Phantombuster or Make.com automation handles DM queuing.", api: "Instagram Graph API / Phantombuster" },
             { step: "06", title: "Tracking & Analytics", color: "#14B8A6", desc: "Each influencer gets a unique referral link (e.g. k12oly.in/ref/rohanmath). Registrations tracked via UTM parameters + referral dashboard. Commission auto-calculated at 20% per registration.", api: "Google Analytics / Custom Dashboard" },
           ].map(w => (
             <div key={w.step} style={{ display: "flex", gap: 20, marginBottom: 20 }}>
@@ -268,7 +300,6 @@ async function send_email(inf) {
               </div>
             </div>
           ))}
-
           <div style={{ background: "rgba(74,158,255,0.08)", border: "1px solid #4A9EFF44", borderRadius: 14, padding: 24, marginTop: 16 }}>
             <div style={{ fontWeight: 800, fontSize: 16, color: "#4A9EFF", marginBottom: 12 }}>📊 Segment Strategy Summary</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
@@ -285,14 +316,13 @@ async function send_email(inf) {
 
       {view !== "workflow" && (
         <div style={{ padding: "24px 32px" }}>
-          {/* Filters */}
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 24, alignItems: "center" }}>
             <input value={filters.search} onChange={e => setFilters(f => ({ ...f, search: e.target.value }))} placeholder="🔍  Search name, handle, subject..." style={{ padding: "10px 16px", borderRadius: 10, border: "1px solid #1E2540", background: "#0F1629", color: "#E8EAF0", fontSize: 13, outline: "none", minWidth: 240, fontFamily: "'Outfit', sans-serif" }} />
             {[
-              { key: "segment", options: SEGMENTS, label: "Segment" },
-              { key: "subject", options: SUBJECTS, label: "Subject" },
-              { key: "platform", options: PLATFORMS, label: "Platform" },
-              { key: "brandFit", options: BRAND_FITS, label: "Brand Fit" },
+              { key: "segment", options: SEGMENTS },
+              { key: "subject", options: SUBJECTS },
+              { key: "platform", options: PLATFORMS },
+              { key: "brandFit", options: BRAND_FITS },
             ].map(f => (
               <select key={f.key} value={filters[f.key]} onChange={e => setFilters(prev => ({ ...prev, [f.key]: e.target.value }))} style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #1E2540", background: "#0F1629", color: "#8B9BB4", fontSize: 13, cursor: "pointer", fontFamily: "'Outfit', sans-serif" }}>
                 {f.options.map(o => <option key={o}>{o}</option>)}
@@ -301,7 +331,6 @@ async function send_email(inf) {
             <span style={{ fontSize: 12, color: "#6B7A99", fontFamily: "'Space Mono', monospace" }}>{filtered.length} results</span>
           </div>
 
-          {/* Table View */}
           {view === "table" && (
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
@@ -334,7 +363,6 @@ async function send_email(inf) {
             </div>
           )}
 
-          {/* Grid View */}
           {view === "grid" && (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
               {filtered.map(inf => (
@@ -352,14 +380,12 @@ async function send_email(inf) {
                       <span style={{ color: brandFitColor[inf.brandFit], fontSize: 10, fontWeight: 700 }}>★ {inf.brandFit}</span>
                     </div>
                   </div>
-
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
                     <span style={{ background: `${segmentColor[inf.segment]}22`, color: segmentColor[inf.segment], padding: "3px 9px", borderRadius: 6, fontSize: 11, fontWeight: 600 }}>{inf.segment}</span>
                     {inf.subjects.slice(0, 2).map(s => (
                       <span key={s} style={{ background: "rgba(255,255,255,0.06)", color: "#8B9BB4", padding: "3px 9px", borderRadius: 6, fontSize: 11 }}>{s}</span>
                     ))}
                   </div>
-
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
                     <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "8px 12px" }}>
                       <div style={{ fontSize: 10, color: "#6B7A99" }}>Followers</div>
@@ -370,16 +396,12 @@ async function send_email(inf) {
                       <div style={{ fontWeight: 700, color: "#00C98D" }}>{inf.engagementRate}</div>
                     </div>
                   </div>
-
                   <div style={{ fontSize: 11, color: "#6B7A99", marginBottom: 12, lineHeight: 1.5 }}>
                     <span style={{ color: "#8B9BB4" }}>📍</span> {inf.location} &nbsp;•&nbsp; <span style={{ fontStyle: "italic" }}>"{inf.recentContent.substring(0, 40)}..."</span>
                   </div>
-
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div style={{ fontSize: 10, color: "#6B7A99", fontFamily: "'Space Mono', monospace" }}>{inf.email}</div>
-                    <button style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: "linear-gradient(135deg, #4A9EFF, #A855F7)", color: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Outfit', sans-serif" }}>
-                      Generate →
-                    </button>
+                    <button style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: "linear-gradient(135deg, #4A9EFF, #A855F7)", color: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Outfit', sans-serif" }}>Generate →</button>
                   </div>
                 </div>
               ))}
@@ -391,10 +413,8 @@ async function send_email(inf) {
       {/* Modal */}
       {selected && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 20, backdropFilter: "blur(4px)" }} onClick={(e) => { if (e.target === e.currentTarget) setSelected(null); }}>
-         <div style={{ background: "#0F1629", border: "1px solid #1E2540", borderRadius: 18, width: "100%", maxWidth: 680, maxHeight: "90vh", overflowY: "auto", padding: 28, position: "relative", zIndex: 101 }}>
+          <div style={{ background: "#0F1629", border: "1px solid #1E2540", borderRadius: 18, width: "100%", maxWidth: 680, maxHeight: "90vh", overflowY: "auto", padding: 28, position: "relative", zIndex: 101 }}>
             <button onClick={() => setSelected(null)} style={{ position: "absolute", top: 16, right: 16, background: "#1E2540", border: "none", color: "#6B7A99", width: 32, height: 32, borderRadius: 8, cursor: "pointer", fontSize: 16, fontFamily: "'Outfit', sans-serif" }}>✕</button>
-
-            {/* Profile Header */}
             <div style={{ display: "flex", gap: 16, marginBottom: 20, alignItems: "flex-start" }}>
               <div style={{ width: 56, height: 56, borderRadius: 14, background: `linear-gradient(135deg, ${segmentColor[selected.segment] || "#4A9EFF"}, #A855F7)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 }}>
                 {selected.subjects[0] === "Math" ? "📐" : selected.subjects[0] === "Science" || selected.subjects.includes("Physics") ? "🔬" : selected.subjects[0] === "English" ? "📖" : selected.subjects[0] === "GK" ? "🌍" : "🎓"}
@@ -409,70 +429,45 @@ async function send_email(inf) {
                 </div>
               </div>
             </div>
-
-            {/* Metrics */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 20 }}>
-              {[
-                { label: "Followers", value: selected.followers },
-                { label: "Engagement", value: selected.engagementRate, color: "#00C98D" },
-                { label: "Platform", value: selected.platform },
-              ].map(m => (
+              {[{ label: "Followers", value: selected.followers }, { label: "Engagement", value: selected.engagementRate, color: "#00C98D" }, { label: "Platform", value: selected.platform }].map(m => (
                 <div key={m.label} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 10, padding: "12px 14px" }}>
                   <div style={{ fontSize: 11, color: "#6B7A99" }}>{m.label}</div>
                   <div style={{ fontWeight: 700, color: m.color || "#fff", marginTop: 2 }}>{m.value}</div>
                 </div>
               ))}
             </div>
-
             <div style={{ marginBottom: 16, padding: "12px 16px", background: "rgba(168,85,247,0.08)", borderRadius: 10, borderLeft: "3px solid #A855F7" }}>
               <div style={{ fontSize: 11, color: "#A855F7", fontWeight: 600, marginBottom: 4 }}>RECENT CONTENT</div>
               <div style={{ fontSize: 13, color: "#E8EAF0" }}>{selected.recentContent}</div>
               <div style={{ fontSize: 11, color: "#6B7A99", marginTop: 4 }}>Tone: {selected.tone}</div>
             </div>
-
-            {/* Referral Link */}
-<div style={{ marginBottom: 16, padding: "12px 16px", background: "rgba(74,158,255,0.06)", border: "1px solid #4A9EFF33", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-  <div>
-    <div style={{ fontSize: 10, color: "#4A9EFF", fontWeight: 700, marginBottom: 4 }}>🔗 UNIQUE REFERRAL LINK</div>
-    <div style={{ fontSize: 11, color: "#C5CAD8", fontFamily: "'Space Mono', monospace" }}>
-      k12oly.in/ref/{selected.handle.replace("@", "").toLowerCase()}
-    </div>
-  </div>
-  <button
-    onClick={() => {
-      navigator.clipboard.writeText(`https://k12oly.in/ref/${selected.handle.replace("@", "").toLowerCase()}`);
-      setCopied("link");
-      setTimeout(() => setCopied(null), 2000);
-    }}
-    style={{ padding: "7px 14px", borderRadius: 8, border: "1px solid #4A9EFF66", background: copied === "link" ? "rgba(0,201,141,0.15)" : "rgba(74,158,255,0.12)", color: copied === "link" ? "#00C98D" : "#4A9EFF", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Outfit', sans-serif", whiteSpace: "nowrap" }}>
-    {copied === "link" ? "✓ Copied!" : "Copy Link"}
-  </button>
-</div>
-
-{/* Tone Toggle */}
-<div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-  <span style={{ fontSize: 12, color: "#6B7A99", fontWeight: 600 }}>Tone:</span>
-  {["formal", "casual"].map(t => (
-    <button key={t} onClick={() => { setTone(t); setAiMessage(null); }}
-      style={{ padding: "6px 16px", borderRadius: 8, border: "1px solid", borderColor: tone === t ? "#A855F7" : "#1E2540", background: tone === t ? "rgba(168,85,247,0.15)" : "transparent", color: tone === t ? "#A855F7" : "#6B7A99", cursor: "pointer", fontSize: 12, fontWeight: 600, textTransform: "capitalize", fontFamily: "'Outfit', sans-serif" }}>
-      {t === "formal" ? "🎩 Formal" : "👋 Casual"}
-    </button>
-  ))}
-</div>
-
-            {/* Tabs */}
+            <div style={{ marginBottom: 16, padding: "12px 16px", background: "rgba(74,158,255,0.06)", border: "1px solid #4A9EFF33", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+              <div>
+                <div style={{ fontSize: 10, color: "#4A9EFF", fontWeight: 700, marginBottom: 4 }}>🔗 UNIQUE REFERRAL LINK</div>
+                <div style={{ fontSize: 11, color: "#C5CAD8", fontFamily: "'Space Mono', monospace" }}>k12oly.in/ref/{selected.handle.replace("@", "").toLowerCase()}</div>
+              </div>
+              <button onClick={() => { navigator.clipboard.writeText(`https://k12oly.in/ref/${selected.handle.replace("@", "").toLowerCase()}`); setCopied("link"); setTimeout(() => setCopied(null), 2000); }}
+                style={{ padding: "7px 14px", borderRadius: 8, border: "1px solid #4A9EFF66", background: copied === "link" ? "rgba(0,201,141,0.15)" : "rgba(74,158,255,0.12)", color: copied === "link" ? "#00C98D" : "#4A9EFF", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Outfit', sans-serif", whiteSpace: "nowrap" }}>
+                {copied === "link" ? "✓ Copied!" : "Copy Link"}
+              </button>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+              <span style={{ fontSize: 12, color: "#6B7A99", fontWeight: 600 }}>Tone:</span>
+              {["formal", "casual"].map(t => (
+                <button key={t} onClick={() => { setTone(t); setAiMessage(null); }}
+                  style={{ padding: "6px 16px", borderRadius: 8, border: "1px solid", borderColor: tone === t ? "#A855F7" : "#1E2540", background: tone === t ? "rgba(168,85,247,0.15)" : "transparent", color: tone === t ? "#A855F7" : "#6B7A99", cursor: "pointer", fontSize: 12, fontWeight: 600, textTransform: "capitalize", fontFamily: "'Outfit', sans-serif" }}>
+                  {t === "formal" ? "🎩 Formal" : "👋 Casual"}
+                </button>
+              ))}
+            </div>
             <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-              {[
-                { key: "email", label: "📧 Email Pitch", desc: "60–90 words" },
-                { key: "dm", label: "💬 Instagram DM", desc: "15–30 words" },
-              ].map(t => (
+              {[{ key: "email", label: "📧 Email Pitch", desc: "60–90 words" }, { key: "dm", label: "💬 Instagram DM", desc: "15–30 words" }].map(t => (
                 <button key={t.key} onClick={() => { setActiveTab(t.key); setAiMessage(null); }} style={{ flex: 1, padding: "10px", borderRadius: 10, border: "1px solid", borderColor: activeTab === t.key ? "#4A9EFF" : "#1E2540", background: activeTab === t.key ? "rgba(74,158,255,0.12)" : "transparent", color: activeTab === t.key ? "#4A9EFF" : "#6B7A99", cursor: "pointer", fontFamily: "'Outfit', sans-serif", fontWeight: 600, fontSize: 13 }}>
                   {t.label} <span style={{ fontSize: 10, opacity: 0.7 }}>({t.desc})</span>
                 </button>
               ))}
             </div>
-
-            {/* Static Message */}
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid #1E2540", borderRadius: 12, padding: 16, marginBottom: 16 }}>
               <div style={{ fontSize: 11, color: "#6B7A99", marginBottom: 8, fontWeight: 600 }}>TEMPLATE MESSAGE</div>
               {activeTab === "email" && staticEmail && (
@@ -481,49 +476,30 @@ async function send_email(inf) {
                   <pre style={{ fontSize: 12, color: "#C5CAD8", lineHeight: 1.7, whiteSpace: "pre-wrap", fontFamily: "'Outfit', sans-serif", margin: 0 }}>{staticEmail.body.split("\n").slice(2).join("\n")}</pre>
                 </div>
               )}
-              {activeTab === "dm" && (
-                <div style={{ fontSize: 13, color: "#C5CAD8", lineHeight: 1.7 }}>{staticDM}</div>
-              )}
+              {activeTab === "dm" && <div style={{ fontSize: 13, color: "#C5CAD8", lineHeight: 1.7 }}>{staticDM}</div>}
             </div>
-
-{/* Send Email via Resend */}
-{activeTab === "email" && (
-  <button
-    onClick={() => send_email(selected)}
-    disabled={sending}
-    style={{
-      width: "100%",
-      padding: "13px",
-      borderRadius: 12,
-      border: `1px solid ${sendStatus === "success" ? "#00C98D44" : sendStatus === "error" ? "#FF6B6B44" : "#F5A62344"}`,
-      background: sending ? "#1E2540" : sendStatus === "success" ? "rgba(0,201,141,0.2)" : sendStatus === "error" ? "rgba(255,107,107,0.2)" : "rgba(245,166,35,0.15)",
-      color: sending ? "#6B7A99" : sendStatus === "success" ? "#00C98D" : sendStatus === "error" ? "#FF6B6B" : "#F5A623",
-      cursor: sending ? "not-allowed" : "pointer",
-      fontWeight: 700,
-      fontSize: 14,
-      fontFamily: "'Outfit', sans-serif",
-      marginBottom: 12,
-    }}>
-    {sending ? "📤 Sending..." : sendStatus === "success" ? "✓ Email Sent via Resend!" : sendStatus === "error" ? "✗ Send Failed — Check API" : "📤 Send Email via Resend API"}
-  </button>
-)}
-            {/* AI Generate */}
-            <button onClick={() => generateAIMessage(selected, activeTab)} disabled={generating} style={{ width: "100%", padding: "13px", borderRadius: 12, border: "none", background: generating ? "#1E2540" : "linear-gradient(135deg, #4A9EFF, #A855F7)", color: generating ? "#6B7A99" : "#fff", cursor: generating ? "not-allowed" : "pointer", fontWeight: 700, fontSize: 14, fontFamily: "'Outfit', sans-serif", marginBottom: aiMessage ? 16 : 0 }}>
+            {activeTab === "email" && (
+              <button onClick={() => send_email(selected)} disabled={sending}
+                style={{ width: "100%", padding: "13px", borderRadius: 12, border: `1px solid ${sendStatus === "success" ? "#00C98D44" : sendStatus === "error" ? "#FF6B6B44" : "#F5A62344"}`, background: sending ? "#1E2540" : sendStatus === "success" ? "rgba(0,201,141,0.2)" : sendStatus === "error" ? "rgba(255,107,107,0.2)" : "rgba(245,166,35,0.15)", color: sending ? "#6B7A99" : sendStatus === "success" ? "#00C98D" : sendStatus === "error" ? "#FF6B6B" : "#F5A623", cursor: sending ? "not-allowed" : "pointer", fontWeight: 700, fontSize: 14, fontFamily: "'Outfit', sans-serif", marginBottom: 12 }}>
+                {sending ? "📤 Sending..." : sendStatus === "success" ? "✓ Email Sent via Resend!" : sendStatus === "error" ? "✗ Send Failed — Check API" : "📤 Send Email via Resend API"}
+              </button>
+            )}
+            <button onClick={() => generateAIMessage(selected, activeTab)} disabled={generating}
+              style={{ width: "100%", padding: "13px", borderRadius: 12, border: "none", background: generating ? "#1E2540" : "linear-gradient(135deg, #4A9EFF, #A855F7)", color: generating ? "#6B7A99" : "#fff", cursor: generating ? "not-allowed" : "pointer", fontWeight: 700, fontSize: 14, fontFamily: "'Outfit', sans-serif", marginBottom: aiMessage ? 16 : 0 }}>
               {generating ? "✨ Generating with AI..." : "✨ Generate AI-Personalized Version"}
             </button>
-
-{aiMessage && (
-  <div style={{ background: "rgba(0,201,141,0.08)", border: "1px solid #00C98D44", borderRadius: 12, padding: 16 }}>
-<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-      <div style={{ fontSize: 11, color: "#00C98D", fontWeight: 600 }}>AI-GENERATED PERSONALIZED MESSAGE</div>
-      <button onClick={() => { navigator.clipboard.writeText(aiMessage); setCopied("msg"); setTimeout(() => setCopied(null), 2000); }}
-        style={{ padding: "4px 12px", borderRadius: 6, border: "1px solid #00C98D44", background: copied === "msg" ? "rgba(0,201,141,0.2)" : "transparent", color: "#00C98D", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: "'Outfit', sans-serif" }}>
-        {copied === "msg" ? "✓ Copied!" : "Copy"}
-      </button>
-    </div>
-    <pre style={{ fontSize: 12, color: "#C5CAD8", lineHeight: 1.7, whiteSpace: "pre-wrap", fontFamily: "'Outfit', sans-serif", margin: 0 }}>{aiMessage}</pre>
-  </div>
-)}
+            {aiMessage && (
+              <div style={{ background: "rgba(0,201,141,0.08)", border: "1px solid #00C98D44", borderRadius: 12, padding: 16 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                  <div style={{ fontSize: 11, color: "#00C98D", fontWeight: 600 }}>AI-GENERATED PERSONALIZED MESSAGE</div>
+                  <button onClick={() => { navigator.clipboard.writeText(aiMessage); setCopied("msg"); setTimeout(() => setCopied(null), 2000); }}
+                    style={{ padding: "4px 12px", borderRadius: 6, border: "1px solid #00C98D44", background: copied === "msg" ? "rgba(0,201,141,0.2)" : "transparent", color: "#00C98D", cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: "'Outfit', sans-serif" }}>
+                    {copied === "msg" ? "✓ Copied!" : "Copy"}
+                  </button>
+                </div>
+                <pre style={{ fontSize: 12, color: "#C5CAD8", lineHeight: 1.7, whiteSpace: "pre-wrap", fontFamily: "'Outfit', sans-serif", margin: 0 }}>{aiMessage}</pre>
+              </div>
+            )}
           </div>
         </div>
       )}
