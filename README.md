@@ -197,4 +197,4 @@ npm run dev
 ## 👤 Submitted By
 
 **Sankalp Bhattacharjee**
-Assignment 4 — Automated Micro-Influencer Outreach System
+Automated Micro-Influencer Outreach System
