@@ -1,6 +1,6 @@
 # 🏆 K12 Olympiad — Automated Micro-Influencer Outreach System
 
-> **Assignment 4 Submission** | AI-powered influencer discovery, enrichment, and personalized outreach for K12 Olympiad
+AI-powered influencer discovery, enrichment, and personalized outreach for K12 Olympiad
 
 ---
 
